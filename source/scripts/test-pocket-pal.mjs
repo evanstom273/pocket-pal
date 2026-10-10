@@ -7,7 +7,7 @@ const require=createRequire(import.meta.url);
 const {buildSync}=createRequire(require.resolve('drizzle-kit'))('esbuild');
 const output=mkdtempSync(join(tmpdir(),'pocket-pal-tests-'));
 try{
- const files=['pet.test','expansion.test'];
+ const files=['pet.test','expansion.test','access.test'];
  for(const name of files)buildSync({entryPoints:[`tests/${name}.ts`],bundle:true,platform:'node',format:'esm',outfile:join(output,`${name}.mjs`)});
  const result=spawnSync(process.execPath,['--test',...files.map(name=>join(output,`${name}.mjs`))],{stdio:'inherit'});
  process.exitCode=result.status??1;
