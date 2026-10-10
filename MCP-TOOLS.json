@@ -1,0 +1,961 @@
+{
+  "tools": [
+    {
+      "name": "get_pet",
+      "description": "Read the complete persistent Pocket Pal state after real elapsed time. Never invent state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_pet_status",
+      "description": "Check needs, hydration, mood, sleep, illness, wallet, independence and any request or pending adventure.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "hatch_pet",
+      "description": "Hatch the first Piplet only if no pet exists. Never replaces an existing companion.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "feed_pet",
+      "description": "Feed one stocked meal, consuming one pantry item. Use get_pantry for names or IDs; omit food for an owned favourite. Never creates food.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "food": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Stocked food name or item ID."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "give_drink",
+      "description": "Give one stocked drink, consuming it. Omit drink for a stocked favourite. Check get_pantry when unsure.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "drink": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Drink name or item ID."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "give_treat",
+      "description": "Give one stocked treat. Maximum three per hour; happiness gains diminish.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "treat": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Treat name or item ID."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "play_with_pet",
+      "description": "Play a specific activity from get_activities, or omit for a personality-suited choice. Some activities need an owned toy. Costs energy.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "activity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Activity name or ID from get_activities."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "cuddle_pet",
+      "description": "Share personality-aware affection. Safe while sleeping.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "clean_pet",
+      "description": "Give a free basic bath while awake. Grooming items are optional.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "put_pet_to_sleep",
+      "description": "Tuck the pet in. Sleep restores energy; natural waking follows about eight hours.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "wake_pet",
+      "description": "Wake the pet gently. Low energy can cause grumpiness.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "give_medicine",
+      "description": "Help an ill pet recover. Free, four-hour cooldown; no benefit if healthy.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "rename_pet",
+      "description": "Rename the SAME pet and record the change.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "new_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [
+          "new_name"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_pet_history",
+      "description": "Read permanent memories newest first, with pagination and an optional type filter. Use actual recorded events for what happened while away.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "event_type": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_pet_personality",
+      "description": "Read original traits, learned habits, preferences, relationships, independence and current requests.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_pet_stats",
+      "description": "Read lifetime care, economy, discoveries, independent care and adventure statistics.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_pet_milestones",
+      "description": "Read earned and optionally locked milestones.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "include_locked": {
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_wallet",
+      "description": "Read Dewdrops, earning rate and explanation, offline earnings, legacy grant and recent transactions. Prices and amounts use decimal Dewdrops.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_shop",
+      "description": "Browse the large shop catalogue. Prices use decimal Dewdrops; purchase by item ID. Filter by category or query and paginate.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "food",
+              "drink",
+              "treat",
+              "toy",
+              "bedding",
+              "decoration",
+              "grooming",
+              "adventure",
+              "outdoor",
+              "accessory",
+              "collectible",
+              "special",
+              "storage",
+              "upgrade"
+            ]
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "purchase_item",
+      "description": "Buy stock or a possession using in-game Dewdrops. This spends no real money. Check prices and inventory first. Reuse request_id on retry.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Exact item ID from get_shop."
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_pantry",
+      "description": "List owned consumable food, drinks, treats and supplies with quantities. No item is infinite.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "food",
+              "drink",
+              "treat",
+              "toy",
+              "bedding",
+              "decoration",
+              "grooming",
+              "adventure",
+              "outdoor",
+              "accessory",
+              "collectible",
+              "special",
+              "storage",
+              "upgrade"
+            ]
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_possessions",
+      "description": "List owned toys, furnishings, equipment and keepsakes, including selected items, favourites and temporarily missing toys.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "food",
+              "drink",
+              "treat",
+              "toy",
+              "bedding",
+              "decoration",
+              "grooming",
+              "adventure",
+              "outdoor",
+              "accessory",
+              "collectible",
+              "special",
+              "storage",
+              "upgrade"
+            ]
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "play_with_toy",
+      "description": "Offer an OWNED toy and play together. Toys develop favourites and temporary boredom. Omit item_id to let the pet choose.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Owned toy ID or name."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "use_item",
+      "description": "Use an owned consumable supply or equip a reusable furnishing/accessory. Owned toys can be offered here too. Does not buy anything.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Owned item ID or name."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_activities",
+      "description": "Read the full activity book, with needs, personality affinity and equipment requirements.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "Games",
+              "Creative",
+              "Quiet",
+              "Training",
+              "Silly",
+              "Exploring"
+            ]
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_destinations",
+      "description": "Read places to visit, fictional local weather, residents, discoveries and favourite locations. All outings are accompanied.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "take_a_walk",
+      "description": "Begin an accompanied outing and a branching adventure at a destination. Read the returned choices; do not invent or auto-complete them.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "destination": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Destination ID or name from get_destinations."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_adventure",
+      "description": "Read the saved current adventure page and actual choices. Adventures persist between Site and chats.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "choose_adventure_option",
+      "description": "Choose an option explicitly selected by the user. Obtain current run_id, node_id and choice_id from get_adventure; stale pages are rejected.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Current adventure runId."
+          },
+          "node_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Current nodeId."
+          },
+          "choice_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "One of the current choice IDs."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [
+          "run_id",
+          "node_id",
+          "choice_id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "head_home",
+      "description": "Leave the current adventure and return home. Records the early return without completing the adventure.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "talk_to_pet",
+      "description": "Interact: greet, listen to requests, be silly, encourage confidence, recall a real memory, or search for a misplaced toy.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "enum": [
+              "hello",
+              "listen",
+              "silly",
+              "encourage",
+              "memory",
+              "search"
+            ]
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_preferences",
+      "description": "Read learned favourite foods, drinks, treats, toys, activities and locations, dislikes and experience counts. Preferences are earned through repeated experiences.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_memories",
+      "description": "Read permanent memories with pagination, including dreams, outings and important adventure outcomes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "event_type": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_autonomous_events",
+      "description": "Read recent independent activity, sleep and dreams. Describe only stored events.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "set_independent_care",
+      "description": "Enable or pause age-appropriate self-feeding, drinking and toy use. Natural sleep and dreams continue.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "request_care_basket",
+      "description": "Receive basic supplies if both the pantry and purse are empty. Limited to once daily, to keep care forgiving.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Optional unique request ID. Reuse when retrying the same action to prevent duplicate purchases or care."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

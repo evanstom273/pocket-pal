@@ -1,0 +1,41 @@
+{
+  "exportDate": "2026-10-10",
+  "app": "Pocket Pal",
+  "source": {
+    "publishedVersion": 5,
+    "commit": "ab2ba1e5f9e01529606591f20b9a2c675926f75b",
+    "projectId": "appgprj_6abf3dadd1088191baf8b06c678f658e",
+    "liveUrl": "https://pocket-pal.thehardway1-yt.chatgpt.site",
+    "mcpUrl": "https://pocket-pal.thehardway1-yt.chatgpt.site/mcp",
+    "trackedFiles": 139,
+    "unchanged": true
+  },
+  "petBackup": {
+    "path": "private-backup/Pebble-2026-10-10.json",
+    "name": "Pebble",
+    "format": "pocket-pal",
+    "version": 2,
+    "exportedAt": "2026-10-10T05:09:16.926Z",
+    "sourceRevision": 1125,
+    "petId": "697dfc8c-651a-4d76-af43-8ae65c323479",
+    "originalCreatedAt": "2026-10-02T12:55:35.939Z",
+    "permanentJournalEntries": 91,
+    "historyMatchesSnapshot": true
+  },
+  "mcp": {
+    "toolCount": 36,
+    "externalClaudeAuthenticationVerified": false
+  },
+  "omitted": [
+    "Git history and credentials",
+    "node_modules and build output",
+    "Internal deduplication receipts and older migration archive"
+  ],
+  "checks": {
+    "sourceFileComparison": "byte-for-byte against the published source checkout",
+    "backup": "Parsed JSON; full pet state and all permanent journal entries preserved in the app's fullBackup format",
+    "cleanBuild": "not run",
+    "liveRestore": "not run",
+    "claudeEndToEndConnection": "not run"
+  }
+}
