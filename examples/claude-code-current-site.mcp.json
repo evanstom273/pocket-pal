@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pocket-pal": {
+      "type": "http",
+      "url": "https://pocket-pal.thehardway1-yt.chatgpt.site/mcp"
+    }
+  }
+}

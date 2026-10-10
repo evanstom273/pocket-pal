@@ -1,0 +1,5 @@
+import {operate,memories,fullBackup} from '@/lib/pet/service';
+import {database,identity,sameOrigin,json,errorResponse} from '@/lib/pet/storage';
+export const dynamic='force-dynamic';
+export async function GET(request:Request){try{const owner=identity(request),db=database(),result=await operate(db,owner);const url=new URL(request.url);if(result.pet&&url.searchParams.get('view')==='backup')return json(await fullBackup(db,owner,result.pet,Date.now()));if(result.pet&&url.searchParams.get('view')==='history'){const offset=Math.max(0,Math.min(50000,Number(url.searchParams.get('offset'))||0)),type=url.searchParams.get('type')||undefined;return json({history:await memories(db,owner,result.pet,type,100,offset),offset})}return json(result)}catch(e){return errorResponse(e)}}
+export async function POST(request:Request){try{const owner=identity(request);sameOrigin(request);const body=await request.text();if(body.length>5000000)return json({error:'That backup is too large.'},413);let data;try{data=JSON.parse(body)}catch{return json({error:'Please send valid JSON.'},400)}return json(await operate(database(),owner,data))}catch(e){return errorResponse(e)}}

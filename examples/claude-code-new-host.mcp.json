@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pocket-pal": {
+      "type": "http",
+      "url": "https://YOUR-NEW-HOST/mcp"
+    }
+  }
+}

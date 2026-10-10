@@ -1,0 +1,9 @@
+export type ItemCategory='food'|'drink'|'treat'|'toy'|'bedding'|'decoration'|'grooming'|'adventure'|'outdoor'|'accessory'|'collectible'|'special'|'storage'|'upgrade';
+export type Item={id:string;name:string;category:ItemCategory;group:string;description:string;icon:string;price:number;rarity:'everyday'|'uncommon'|'rare';consumable:boolean;effects?:{hunger?:number;hydration?:number;happiness?:number;energy?:number;cleanliness?:number;health?:number};tags:string[];traits:string[];behaviour?:string;benefit?:'sleep'|'groom'|'explore'|'storage'|'comfort'|'selfcare';minStage?:'Baby'|'Child'|'Teen'|'Adult'};
+export type Activity={id:string;name:string;category:'Games'|'Creative'|'Quiet'|'Training'|'Silly'|'Exploring';description:string;icon:string;energy:number;happiness:number;mess:number;traits:string[];toyTag?:string;outcomes:string[]};
+export type Location={id:string;name:string;description:string;icon:string;energy:number;mess:number;traits:string[];resident:string;weather:Record<'sunny'|'breezy'|'drizzly'|'misty',string>;discovery:string;hazard:string;collectibleId:string};
+export type AdventureChoice={id:string;label:string;next?:string;outcome?:string;reward?:{happiness?:number;bond?:number;confidence?:number;currency?:number;collectible?:boolean;relationship?:number};tendency?:string};
+export type AdventureNode={id:string;text:string;choices:AdventureChoice[]};
+export type Adventure={id:string;title:string;locationTags:string[];intro:string;nodes:AdventureNode[];memory:string;trait?:string};
+export type Dream={id:string;title:string;text:string;theme:string;traits?:string[]};
+export type ReactionPool=Record<string,string[]>;
