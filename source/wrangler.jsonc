@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pocket-pal",
+  "main": "./build/sites-worker.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pocket-pal",
+      "database_id": "cc9c64d1-9200-45c4-8a4a-f99d570c4a84",
+      "migrations_dir": "./drizzle"
+    }
+  ]
+}
